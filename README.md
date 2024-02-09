@@ -32,22 +32,22 @@ This defines the dimensions of the bike. "Required for rider" determines whether
 ## rider.json
 This can define multiple riders. Each rider must have the following defined.
 
-| Parameter Name        | Required for Rider | Description                                                                   |
-|-----------------------| ------------------ |-------------------------------------------------------------------------------|
-| seatLengthFwd         | Yes                | The length of the seat forward of the seatpost.                               |
-| seatLengthAft         | Yes                | The length of the seat behind the seatpost.                                   |
-| seatRiderOffsetX      | Yes              | The horizontal offset of the rider hip joint from the seat/seatpost position. |
-| seatRiderOffsetY      | Yes              | The vertical offset of the rider hip joint from the seat/seatpost position.   |
-| hip2ShoulderLength    | Yes            | The distance between the hip joint point and the shoulder joint point.        |
-| hip2KneeLength        | Yes                | The distance from the hip joint to the knee joint. |
-| knee2AnkleLength      | Yes              | The distance between the knee joint point to the ankle joint point. |
-| footLength            | Yes                | The length from the ankle joint to the toe. |
-| footContactProportion | Yes         | The proportion from the rear of the foot that the foot contacts the middle of the pedal. |
-| pedalLength           | Yes         | The Length of the pedal. |
-| shoulder2ElbowLength  | Yes         | The length from the shoulder joint to the elbow joint. |
-| elbowWristContactLength | Yes       | The length from the elbow joint to the wrist joint. |
-| wrist2FingerHoldPoint | Yes         | The length from the wrist joint to the point on the fingers that wrap around the levers. |
-| hip2HorizontalAngleDeg | Yes        | The angle, in degrees of the riders torso, to the horizontal. |
+| Parameter Name         | Required for Rider | Description                                                                   |
+|------------------------|--------------------|-------------------------------------------------------------------------------|
+| seatLengthFwd          | Yes                | The length of the seat forward of the seatpost.                               |
+| seatLengthAft          | Yes                | The length of the seat behind the seatpost.                                   |
+| seatRiderOffsetX       | Yes                | The horizontal offset of the rider hip joint from the seat/seatpost position. |
+| seatRiderOffsetY       | Yes                | The vertical offset of the rider hip joint from the seat/seatpost position.   |
+| hip2ShoulderLength     | Yes                | The distance between the hip joint point and the shoulder joint point.        |
+| hip2KneeLength         | Yes                | The distance from the hip joint to the knee joint. |
+| knee2AnkleLength       | Yes                | The distance between the knee joint point to the ankle joint point. |
+| footLength             | Yes                | The length from the ankle joint to the toe. |
+| footContactProportion  | Yes                | The proportion from the rear of the foot that the foot contacts the middle of the pedal. |
+| pedalLength            | Yes                | The Length of the pedal. |
+| shoulder2ElbowLength   | Yes                | The length from the shoulder joint to the elbow joint. |
+| elbowWristContactLength| Yes                | The length from the elbow joint to the wrist joint. |
+| wrist2FingerHoldPoint  | Yes                | The length from the wrist joint to the point on the fingers that wrap around the levers. |
+| hip2HorizontalAngleDeg | Yes                | The angle, in degrees of the riders torso, to the horizontal. |
 
 # Use
 Update both bike.json and rider.json with your configurations, then run

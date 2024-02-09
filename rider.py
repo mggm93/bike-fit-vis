@@ -9,10 +9,11 @@ class Rider:
     """
     Contains methods for calculating positions of the rider and seat.
     """
-    def __init__(self, rc, bike, seatColor='royalblue', riderColor='blueviolet', riderAlpha=0.5, ax=None):
+    def __init__(self, rc, bike, name=None, seatColor='royalblue', riderColor='blueviolet', riderAlpha=0.5, ax=None):
         """
         :param rc: The rider config dictionary.
         :param bike: An existing bike class containing frame, seat and crank positions.
+        :param name: Name of the rider
         :param seatColor: The named color to use for drawing the seat.
         :param riderColor: The named color to use for drawing the rider.
         :param Alpha: The alpha transparency value for the rider, from 0 to 1.
@@ -20,6 +21,10 @@ class Rider:
         """
         self.rc = rc
         self.bike = bike
+        if name == None:
+          self.name = riderColor
+        else:
+          self.name = name
         self.seatColor = seatColor
         self.riderColor = riderColor
         self.riderAlpha = riderAlpha

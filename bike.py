@@ -6,13 +6,19 @@ class Bike:
     """
     Contains methods for calculating positions of the bike frame, wheels, crank and pedals.
     """
-    def __init__(self, bc, ax=None):
+    def __init__(self, bc, name=None, color="gray", ax=None):
         """
         :param bc: The bike configuration dictionary.
+        :param color: The named color to use for drawing the bike
+        :param ax: The axes object to plot on.
         """
         self.bc = bc
+        if name == None:
+          self.name = color
+        else:
+          self.name = name
         self.ax = ax
-        self.color = 'gray'
+        self.color = color
 
         self.rearWheelLoc = None
         self.xrw = None
@@ -114,7 +120,7 @@ class Bike:
         Draw the rear wheel circle.
         """
         # Plot Rear Wheel
-        self.ax.plot(self.xrw, self.yrw, 'r')
+        self.ax.plot(self.xrw, self.yrw, c=self.color)
 
     def calcFrontWheelLoc(self):
         """
@@ -129,7 +135,7 @@ class Bike:
         Draw the front wheel circle.
         """
         # Plot Front Wheel
-        self.ax.plot(self.xfw, self.yfw, 'r')
+        self.ax.plot(self.xfw, self.yfw, c=self.color)
 
     def calcSeatTubeLine(self):
         """
@@ -277,7 +283,7 @@ class Bike:
         Draw the cranks.
         """
         if self.crankLine is None:
-            self.crankLine, = self.ax.plot([], [], 'b')
+            self.crankLine, = self.ax.plot([], [], c=self.color)
 
         self.crankLine.set_data([self.c1x, self.c2x], [self.c1y, self.c2y])
 

@@ -8,24 +8,28 @@ from rider import Rider
 
 if __name__ == '__main__':
     # Read bike configuration
+    bikeNames = []
     with open('bike.json') as f:
-        bc = json.load(f)
-        print('Read bike configuration file:')
+      bcs = json.load(f)
+      print('Read bike configuration file:')
+      for bikeName, bc in bcs.items():
+        bikeNames.append(bikeName)
+        print("Bike: %s" % bikeName)
         for key, val in bc.items():
-            print(key+":", val)
+          print(key+":", val)
         print()
 
     # Read rider configurations
     riderNames = []
     with open('rider.json') as f:
-        rcs = json.load(f)
-        print('Read rider configuration file:')
-        for riderName, rc in rcs.items():
-            riderNames.append(riderName)
-            print("Rider: %s" % riderName)
-            for key, val in rc.items():
-                print(key+":", val)
-            print()
+      rcs = json.load(f)
+      print('Read rider configuration file:')
+      for riderName, rc in rcs.items():
+        riderNames.append(riderName)
+        print("Rider: %s" % riderName)
+        for key, val in rc.items():
+          print(key+":", val)
+        print()
 
     # Create figure
     fig = plt.figure(figsize=(13*1.5, 5*1.5))
@@ -44,19 +48,24 @@ if __name__ == '__main__':
     ax1.axis('off')
     plt.ion()
 
-    # Create bike
-    bike = Bike(bc, ax=ax1)
-    bike.calcBikePositions()
+    # Create bikes
+    bikes = []
+    bikeColors = ['black', 'gray', 'yellow']
+    for i, bikeName in enumerate(bikeNames):
+      bikes.append(Bike(bcs[bikeName], bikeName, color=bikeColors[i], ax=ax1))
+      bikes[i].calcBikePositions()
 
     # Create riders
     riders = []
     seatColors = ['royalblue', 'lime', 'purple', 'cyan']
     riderColors = ['blueviolet', 'darkgreen', 'red', 'lime']
     for i, riderName in enumerate(riderNames):
-      riders.append(Rider(rcs[riderName], bike, seatColor=seatColors[i], riderColor=riderColors[i], riderAlpha=0.5, ax=ax1))
+      for bike in bikes:
+        riders.append(Rider(rcs[riderName], bike, riderName, seatColor=seatColors[i], riderColor=riderColors[i], riderAlpha=0.5, ax=ax1))
 
     # Draw bike
-    bike.drawBikePositions()
+    for bike in bikes:
+      bike.drawBikePositions()
 
     # Draw Seat
     for rider in riders:
@@ -64,9 +73,10 @@ if __name__ == '__main__':
 
     # Draw pedal and feet
     for crankAngleDeg in np.linspace(-2, 360*40, 360*20):
-        # Draw cranks
-        bike.calcCrankLoc(theta=-crankAngleDeg)
-        bike.drawCrank()
+      # Draw cranks
+        for bike in bikes:
+          bike.calcCrankLoc(theta=-crankAngleDeg)
+          bike.drawCrank()
 
         # Draw rider lower body
         for rider in riders:
