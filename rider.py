@@ -79,6 +79,7 @@ class Rider:
         self.crankAngle = []
         self.kneeAngle = []
         self.hipAngle = []
+        self.ankleAngle = []
 
         self.kneeAngleLine = None
         self.hipAngleLine = None
@@ -95,6 +96,21 @@ class Rider:
         self.printedMinMaxes = False
 
         self.calcSeatExtensionPos()
+
+    def _angleBetween3Points(self, pa, pb, pc):
+      """
+        Calculate the angle between three points where
+        vecA is the vector from pb to pa
+        vecB is the vector from pb to pc
+        angle = acos ( vecA,vecB / (|vecA| * |vecB|) )
+      """
+      vecA = pa - pb
+      vecB = pc - pb
+      aDotB = np.dot(vecA, vecB)
+      aMag = (np.dot(vecA, vecA))**0.5
+      bMag = (np.dot(vecB, vecB))**0.5
+      angle = math.acos(aDotB / (aMag * bMag))
+      return angle * 180.0 / math.pi
 
     def calcSeatExtensionPos(self):
         """
@@ -183,6 +199,13 @@ class Rider:
 
         return hipAngle
 
+    def calcAnkleAngle(self):
+      """
+      Calculate the ankle angle in degrees.
+      """
+      ankleAngle = self._angleBetween3Points(self.fourBarLegs.Bnn, self.fourBarLegs.Ann, self.fourBarLegs.O2n)
+      return ankleAngle
+
     def calcRiderLowerBody(self, crankAngleDeg):
         """
         Calculate all points of the rider.
@@ -219,11 +242,19 @@ class Rider:
             self.crankAngle.append(crankAngleDeg)
             self.kneeAngle.append(abs(self.currKneeAngle))
             self.hipAngle.append(abs(self.currHipAngle))
+            self.ankleAngle.append(abs(self.calcAnkleAngle()))
         elif not self.printedMinMaxes and len(self.crankAngle) > 0:
-          print("{} ({}): "\
-              "Knee Min: {:.2f} deg, Knee Max: {:.2f} deg, Hip Min: {:.2f} deg, Hip Max: {:.2f} deg, "\
-              "Ellbow: {:.2f} deg, Shoulder: {:.2f} deg"\
-              .format(self.name, self.bike.name, min(self.kneeAngle), max(self.kneeAngle), min(self.hipAngle), max(self.hipAngle), self.ellbowAngle, self.shoulderAngle))
+          print('--{} ({})-- \n'\
+              'Knee angle (deg)    : Min: {:.2f}, Max: {:.2f} \n'\
+              'Hip angle (deg)     : Min: {:.2f}, Max: {:.2f} \n'\
+              'Ankle angle (deg)   : Min: {:.2f}, Max: {:.2f} \n'\
+              'Ellbow angle (deg)  : {:.2f} \n'
+              'Shoulder angle (deg): {:.2f} '\
+              .format(self.name, self.bike.name, \
+              min(self.kneeAngle), max(self.kneeAngle), \
+              min(self.hipAngle), max(self.hipAngle), \
+              min(self.ankleAngle), max(self.ankleAngle), \
+              self.ellbowAngle, self.shoulderAngle))
           self.printedMinMaxes = True
 
 
@@ -324,16 +355,8 @@ class Rider:
             self.fourBarUpper.setO2O4Pt(O2, O4, adjustedHipAngle)
 
         # Calcualte ellbow and shoulder angles
-        def angleBetween2Vec(pa, pb, pc):
-          vecA = pa - pb
-          vecB = pc - pb
-          aDotB = np.dot(vecA, vecB)
-          aMag = (np.dot(vecA, vecA))**0.5
-          bMag = (np.dot(vecB, vecB))**0.5
-          angle = math.acos(aDotB / (aMag * bMag))
-          return angle * 180.0 / math.pi
-        self.shoulderAngle = angleBetween2Vec(self.fourBarUpper.O2, self.fourBarUpper.Ann, self.fourBarUpper.Bnn)
-        self.ellbowAngle = angleBetween2Vec(self.fourBarUpper.Ann, self.fourBarUpper.Bnn, self.fourBarUpper.O4)
+        self.shoulderAngle = self._angleBetween3Points(self.fourBarUpper.O2, self.fourBarUpper.Ann, self.fourBarUpper.Bnn)
+        self.ellbowAngle = self._angleBetween3Points(self.fourBarUpper.Ann, self.fourBarUpper.Bnn, self.fourBarUpper.O4)
 
 
     def drawUpperBody(self):
