@@ -89,6 +89,9 @@ class Rider:
         self.currKneeAngleDot = None
         self.currHipAngleDot = None
 
+        self.ellbowAngle = None
+        self.shoulderAngle = None
+
         self.printedMinMaxes = False
 
         self.calcSeatExtensionPos()
@@ -217,8 +220,11 @@ class Rider:
             self.kneeAngle.append(abs(self.currKneeAngle))
             self.hipAngle.append(abs(self.currHipAngle))
         elif not self.printedMinMaxes and len(self.crankAngle) > 0:
-            print('%20s. Knee Min: %.2f deg, Knee Max: %.2f deg, Hip Min: %.2f deg, Hip Max: %.2f deg' % (self.riderColor, min(self.kneeAngle), max(self.kneeAngle), min(self.hipAngle), max(self.hipAngle)))
-            self.printedMinMaxes = True
+          print("{} ({}): "\
+              "Knee Min: {:.2f} deg, Knee Max: {:.2f} deg, Hip Min: {:.2f} deg, Hip Max: {:.2f} deg, "\
+              "Ellbow: {:.2f} deg, Shoulder: {:.2f} deg"\
+              .format(self.name, self.bike.name, min(self.kneeAngle), max(self.kneeAngle), min(self.hipAngle), max(self.hipAngle), self.ellbowAngle, self.shoulderAngle))
+          self.printedMinMaxes = True
 
 
     def drawAngleLines(self, axKnee, axHip):
@@ -316,6 +322,18 @@ class Rider:
             self.fourBarUpper = FourBarLink(O2, O4, O2ALen, ABLen, BO4Len, adjustedHipAngle)
         else:
             self.fourBarUpper.setO2O4Pt(O2, O4, adjustedHipAngle)
+
+        # Calcualte ellbow and shoulder angles
+        def angleBetween2Vec(pa, pb, pc):
+          vecA = pa - pb
+          vecB = pc - pb
+          aDotB = np.dot(vecA, vecB)
+          aMag = (np.dot(vecA, vecA))**0.5
+          bMag = (np.dot(vecB, vecB))**0.5
+          angle = math.acos(aDotB / (aMag * bMag))
+          return angle * 180.0 / math.pi
+        self.shoulderAngle = angleBetween2Vec(self.fourBarUpper.O2, self.fourBarUpper.Ann, self.fourBarUpper.Bnn)
+        self.ellbowAngle = angleBetween2Vec(self.fourBarUpper.Ann, self.fourBarUpper.Bnn, self.fourBarUpper.O4)
 
 
     def drawUpperBody(self):
